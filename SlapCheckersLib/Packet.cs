@@ -13,6 +13,7 @@ namespace SlapCheckersLib
 
         public byte[] Content { get; set; }
 
+
         public object Payload { get; set; }
     }
 }

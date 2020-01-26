@@ -6,14 +6,14 @@ namespace SlapCheckersLib.Game
 {
     class Move
     {
-        public int userId { get; set; }
-        public string fromPosition { get; set; }
-        public string toPosition { get; set; }
-        public Move(int userId, string fromPosition, string toPosition)
+        public int UserId { get; set; }
+        public (int x, int y) FromPosition { get; set; }
+        public (int x, int y) ToPosition { get; set; }
+        public Move(int userId, (int x, int y) fromPosition, (int x, int y) toPosition)
         {
-            this.userId = userId;
-            this.fromPosition = fromPosition;
-            this.toPosition = toPosition;
+            this.UserId = userId;
+            this.FromPosition = fromPosition;
+            this.ToPosition = toPosition;
         }   
     }
 }

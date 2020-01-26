@@ -35,12 +35,12 @@ namespace SlapCheckersServer
                 IPEndPoint serverEndPoint = new IPEndPoint(_ipAddress, _port);
                 _listener = new TcpListener(serverEndPoint);
                 _listener.Start();
-                Console.Write("  ");
+                Console.Write("   ");
                 for (int i = 0; i<8; i++) {
-                    Console.Write($"{(char)(65 + i)} ");
+                    Console.Write($"{(char)(65 + i)}  ");
                 }
                 Console.WriteLine();
-                for (double i = 0; i<8; i+=0.5) {
+                for (double i = 0; i<8; i++) {
                     for (int j = 0; j<9; j++) {
                         if (j == 0) {
                             Console.BackgroundColor = default;
@@ -48,7 +48,8 @@ namespace SlapCheckersServer
                             continue;
                         }
                         Console.BackgroundColor = (i + j) % 2 == 0 ? ConsoleColor.White : ConsoleColor.Black;
-                        Console.Write("    ");
+                        Console.ForegroundColor =  ConsoleColor.Red;
+                        Console.Write(" ● ");
                     }
                     Console.BackgroundColor = default;
                     Console.WriteLine();

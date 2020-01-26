@@ -1,5 +1,6 @@
 ﻿using System;
 using Serilog;
+using SlapCheckersLib.Game;
 
 namespace SlapCheckersClient
 {

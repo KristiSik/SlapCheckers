@@ -6,6 +6,8 @@ using System.Net.Sockets;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 using SlapCheckersLib;
+using SlapCheckersLib.Game;
+using SlapCheckersLib.Requests;
 
 namespace SlapCheckersClient
 {
@@ -25,7 +27,7 @@ namespace SlapCheckersClient
             try 
             {
                 _tcpClient = new TcpClient();
-                _tcpClient.BeginConnect(serverIpAddress, serverPort, new AsyncCallback(RequestCallback), null);
+                _tcpClient.BeginConnect(serverIpAddress, serverPort, new AsyncCallback(ConnectCallback), null);
             } catch (Exception ex)
             {
                 Log.Error("Failed to connect to the server. {reason}", ex.Message);
@@ -33,9 +35,11 @@ namespace SlapCheckersClient
 
         }
 
-        private void RequestCallback(IAsyncResult ar)
+        private void ConnectCallback(IAsyncResult ar)
         {
             _tcpClient.EndConnect(ar);
+            
+            bool v = SendMove(new Move("F3-H4"));
 
             Log.Information("Successfully connected to the server.");
 
@@ -64,9 +68,18 @@ namespace SlapCheckersClient
             }
         }
 
-        public IList<Room> GetAvailableRooms()
+        public bool SendMove(Move move)
         {
-            return null;
+            var moveRequest = new MoveRequest(move);
+            byte[] moveRequestBytes = moveRequest.PackRequest();
+            _tcpClient.GetStream().BeginWrite(moveRequestBytes, 0, moveRequestBytes.Length, new AsyncCallback(WriteCallBack), null);
+            Log.Information("Sent Move request.");
+            return true;
+        }
+
+        private void WriteCallBack(IAsyncResult ar)
+        {
+            _tcpClient.GetStream().EndWrite(ar);
         }
     }
 }

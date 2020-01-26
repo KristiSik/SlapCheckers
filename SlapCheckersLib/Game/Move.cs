@@ -1,19 +1,25 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace SlapCheckersLib.Game
+﻿namespace SlapCheckersLib.Game
 {
-    class Move
+    public class Move
     {
-        public int userId { get; set; }
-        public string fromPosition { get; set; }
-        public string toPosition { get; set; }
+        public int UserId { get; set; }
+
+        public string FromPosition { get; set; }
+
+        public string ToPosition { get; set; }
+
+        public Move(string moveString)
+        {
+            string[] movePositions = moveString.Split('-');
+            FromPosition = movePositions[0];
+            ToPosition = movePositions[1];
+        }
+
         public Move(int userId, string fromPosition, string toPosition)
         {
-            this.userId = userId;
-            this.fromPosition = fromPosition;
-            this.toPosition = toPosition;
+            UserId = userId;
+            FromPosition = fromPosition;
+            ToPosition = toPosition;
         }   
     }
 }

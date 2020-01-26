@@ -5,6 +5,7 @@ using System.Net;
 using System.Net.Sockets;
 using System.Threading.Tasks;
 using System.Collections.Generic;
+using SlapCheckersLib.Requests;
 
 namespace SlapCheckersServer
 {
@@ -58,20 +59,20 @@ namespace SlapCheckersServer
                 _listener.BeginAcceptSocket(new AsyncCallback(AcceptCallback), null);
             });
 
-            Random rnd = new Random();
-            Task.Run(async () => 
-            {
-                while(true)
-                {
-                    _connections.ForEach(c => 
-                    {
-                        int command = rnd.Next(0, 10);
-                        byte[] commandByte = BitConverter.GetBytes(command);
-                        c.Socket.BeginSend(BitConverter.GetBytes(command), 0, commandByte.Length, 0, new AsyncCallback(SendCallback), c);
-                    });
-                    await Task.Delay(1000);
-                }
-            });
+            // Random rnd = new Random();
+            // Task.Run(async () => 
+            // {
+            //     while(true)
+            //     {
+            //         _connections.ForEach(c => 
+            //         {
+            //             int command = rnd.Next(0, 10);
+            //             byte[] commandByte = BitConverter.GetBytes(command);
+            //             c.Socket.BeginSend(BitConverter.GetBytes(command), 0, commandByte.Length, 0, new AsyncCallback(SendCallback), c);
+            //         });
+            //         await Task.Delay(1000);
+            //     }
+            // });
         }
 
         #region Listener
@@ -105,7 +106,8 @@ namespace SlapCheckersServer
             int bytesRead = handler.EndReceive(ar);
             if (bytesRead > 0)
             {
-                Log.Information($"{handler.RemoteEndPoint}: {Encoding.UTF8.GetString(state.Buffer, 0, bytesRead)}");
+                var request = Request.Unpack(state.Buffer);
+                Log.Debug($"Received {request.Type} request.");
             }
         }
 
